@@ -6,7 +6,6 @@
 namespace pa
 {
 
-
 bool operator==(const Point3D& point1, const Point3D& point2)
 {
 	const bool isEqualX = fabs(point1.x - point2.x) <= epsilon;

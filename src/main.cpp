@@ -14,11 +14,11 @@ int main(const int argc, char** argv)
 	const std::filesystem::path file(argv[1]);
 	if (!std::filesystem::exists(file))
 	{
-		std::cerr << file << "does not exist";
+		std::cerr << "The file "<< file << " does not exist";
 		return 1;
 	}
 
-	pa::solveFirstTask(file.string(), argv[2]);
+	pa::solveFirstTask(file, argv[2]);
 
 	return 0;
 }

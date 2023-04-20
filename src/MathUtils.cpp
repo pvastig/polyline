@@ -19,7 +19,6 @@ std::optional<double> findProjectVector(const Vector3D& vector1, const Vector3D&
 	{
 		return std::nullopt;
 	}
-
 	const auto value = dotProduct / length;
 
 	return value;
@@ -39,7 +38,7 @@ std::optional<Point3D> findProjectPointToVector(const Vector3D& vector, const Po
 
 std::ostream& operator<<(std::ostream& os, const PolylineInfo& info)
 {
-	os << info.closestDistance << " " << info.closestPoint << " " << info.segmentCount;
+	os << "count: "<< info.segmentCount << ", dis: " << info.closestDistance << ", point: {" << info.closestPoint << "}";
 	return os;
 }
 
@@ -64,7 +63,7 @@ std::vector<PolylineInfo> findClosestDistance(const std::vector<Point3D>& points
 {
 	const Polyline3D polyline(points);
 	std::multiset <PolylineInfo, comparator> infoSet;
-	for (size_t segmentCount = 0; const auto & segment : polyline.segments())
+	for (size_t segmentCount = 0; const auto& segment : polyline.segments())
 	{
 		if (const auto pointOfProject = findProjectPointToVector(segment, point))
 		{

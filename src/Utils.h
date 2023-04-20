@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <filesystem>
 #include <string_view>
 #include <vector>
 
@@ -34,16 +35,16 @@ Point3D getPointsFromThirdArgument(std::string_view argument);
 
 /// @brief Prints to standart output information like "segment 2 point 2.25 1 0.25"
 ///
-/// @param infos Array of polyline information
+/// @param[in] infos Array of polyline information
 ///
 void print(const std::vector<PolylineInfo>& infos);
 
 /// @brief Solves first task
 ///
-/// @param fileName A file containing polyline points
+/// @param[in] file A file containing polyline points
 ///
-/// @param pointArgument An argument for input point
+/// @param[in] pointArgument An argument for input point
 ///
-void solveFirstTask(std::string_view fileName, std::string_view pointArgument);
+void solveFirstTask(const std::filesystem::path& file, std::string_view pointArgument);
 
 }  // namespace pa

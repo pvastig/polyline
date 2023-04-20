@@ -35,7 +35,9 @@ public:
 	///
 	Vector3D(const Point3D& first, const Point3D& last);
 
-	/// @brief Constructs from coordinate of vector, in this case first and last points are undefined
+	/// @brief Constructs from coordinate of vector
+	///
+	///	@warning In this case first and last points are undefined
 	///
 	/// @param[in] coord A coordinate of vector
 	///

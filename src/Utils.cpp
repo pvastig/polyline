@@ -1,4 +1,3 @@
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -10,10 +9,10 @@
 namespace pa
 {
 
-std::vector<Point3D> readPointsFromFile(std::string_view fileName)
+std::vector<Point3D> readPointsFromFile(const std::filesystem::path& file)
 {
 	std::vector<Point3D> points;
-	if (std::ifstream ifs(fileName, std::ifstream::in); ifs)
+	if (std::ifstream ifs(file, std::ifstream::in); ifs)
 	{
 		double x, y, z;
 		while (ifs >> x >> y >> z)
@@ -51,9 +50,9 @@ void print(const std::vector<PolylineInfo>& infos)
 	}
 }
 
-void solveFirstTask(std::string_view fileName, std::string_view pointArgument)
+void solveFirstTask(const std::filesystem::path& file, std::string_view pointArgument)
 {
-	const auto polylinePoints = readPointsFromFile(fileName);
+	const auto polylinePoints = readPointsFromFile(file);
 	const auto point = getPointsFromThirdArgument(pointArgument);
 	const auto result = findClosestDistance(polylinePoints, point);
 	print(result);
