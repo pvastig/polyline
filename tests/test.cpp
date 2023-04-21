@@ -95,6 +95,12 @@ TEST(polyline, createPolyline)
 		const std::vector<Vector3D> v;
 		ASSERT_EQ(v, polyline.segments());
 	}
+	{
+		const std::vector<Point3D> points{ {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0} };
+		const Polyline3D polyline(points);
+		const std::vector<Vector3D> v{ Point3D{0, 0, 0}, Point3D{0, 0, 0}, Point3D{0, 0, 0} };
+		ASSERT_EQ(v, polyline.segments());
+	}
 }
 
 TEST(polyline, findClosestDistance)
@@ -127,6 +133,12 @@ TEST(polyline, findClosestDistance)
 		const std::vector<Point3D> points = { {0, 0, 0}, {2, 0, 0}, {2, 2, 0}, {0, 2, 0}, {0, 0, 0} };
 		const std::vector<PolylineInfo> refPoints{ {2, 3.16228, {2, 3, 0} }, {3, 3.16228, {3, 2, 0} } };
 		const auto closestPoints = findClosestDistance(points, { 3, 3, 3 });
+		EXPECT_EQ(refPoints, closestPoints);
+	}
+	{
+		const std::vector<Point3D> points = { {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0} };
+		const std::vector<PolylineInfo> refPoints;
+		const auto closestPoints = findClosestDistance(points, { 1, 1, 1 });
 		EXPECT_EQ(refPoints, closestPoints);
 	}
 }

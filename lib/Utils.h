@@ -47,4 +47,6 @@ void print(const std::vector<PolylineInfo>& infos);
 ///
 void solveFirstTask(const std::filesystem::path& file, std::string_view pointArgument);
 
+void solveSecondTask(const std::filesystem::path& file, std::string_view pointArgument);
+
 }  // namespace pa

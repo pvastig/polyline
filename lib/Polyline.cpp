@@ -7,9 +7,10 @@ namespace pa
 
 Polyline3D::Polyline3D(const std::vector<Point3D>& points)
 {
-	for (auto b = points.cbegin(), e = std::next(b); e != points.cend(); ++b, ++e)
+	for (auto beginPointIt = points.cbegin(), endPointIt = std::next(beginPointIt);
+		 endPointIt != points.cend(); ++beginPointIt, ++endPointIt)
 	{
-		m_segments.emplace_back(Vector3D{ *b, *e });
+		m_segments.emplace_back(*beginPointIt, *endPointIt);
 	}
 }
 

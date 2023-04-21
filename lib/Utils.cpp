@@ -58,4 +58,8 @@ void solveFirstTask(const std::filesystem::path& file, std::string_view pointArg
 	print(result);
 }
 
+void  solveSecondTask(const std::filesystem::path&, std::string_view)
+{
+}
+
 }  // namespace pa

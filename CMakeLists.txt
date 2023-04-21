@@ -28,9 +28,11 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
 endif()
 
+include_directories(lib)
 include_directories(src)
 
 enable_testing()
 
 add_subdirectory(src)
+add_subdirectory(lib)
 add_subdirectory(tests)
