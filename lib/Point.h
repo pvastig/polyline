@@ -12,6 +12,12 @@
 namespace pa
 {
 
+struct Point2D
+{
+	double x{};
+	double y{};
+};
+
 struct Point3D
 {
 	/// @brief Adds coordinate of point to stream

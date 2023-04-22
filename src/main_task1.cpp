@@ -5,20 +5,25 @@
 
 int main(const int argc, char** argv)
 {
-	if (argc != 3)
+	try
 	{
-		std::cerr << "2 arguments should be input: file with polyline points and coordinates of the point to be projected.";
-		return 1;
+		if (argc != 3)
+		{
+			throw std::invalid_argument("2 arguments should be input: file with polyline points and coordinates of the point to be projected.");
+		}
+
+		pa::solveFirstTask(argv[1], argv[2]);
+
+		return 0;
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what();
+	}
+	catch (...)
+	{
+		std::cerr << "Unknown error";
 	}
 
-	const std::filesystem::path file(argv[1]);
-	if (!std::filesystem::exists(file))
-	{
-		std::cerr << "The file "<< file << " does not exist";
-		return 1;
-	}
-
-	pa::solveFirstTask(file, argv[2]);
-
-	return 0;
+	return 1;
 }

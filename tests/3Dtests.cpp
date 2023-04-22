@@ -72,34 +72,40 @@ TEST(polyline, dotProduct)
 TEST(polyline, createPolyline)
 {
 	{
+		const std::vector<Point3D> points;
+		const Polyline3D polyline(points);
+		const std::vector<Vector3D> refSegments;
+		ASSERT_EQ(refSegments, polyline.segments());
+	}
+	{
 		const std::vector<Point3D> points{ {0, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 1} };
 		const Polyline3D polyline(points);
-		const std::vector<Vector3D> v{ Point3D{ 1, 0, 0 }, Point3D{ 1, 1, 0 }, Point3D{ 1, 0, 1 } };
-		ASSERT_EQ(v, polyline.segments());
+		const std::vector<Vector3D> refSegments{ Point3D{ 1, 0, 0 }, Point3D{ 1, 1, 0 }, Point3D{ 1, 0, 1 } };
+		ASSERT_EQ(refSegments, polyline.segments());
 	}
 	{
 		const std::vector<Point3D> points{ {0, 0, 0}, {1, 0, 0}, {2, 1, 0} };
 		const Polyline3D polyline(points);
-		const std::vector<Vector3D> v{ Point3D{ 1, 0, 0}, Point3D{1, 1, 0} };
-		ASSERT_EQ(v, polyline.segments());
+		const std::vector<Vector3D> refSegments{ Point3D{ 1, 0, 0}, Point3D{1, 1, 0} };
+		ASSERT_EQ(refSegments, polyline.segments());
 	}
 	{
 		const std::vector<Point3D> points{ {0, 0, 0}, {1, 0, 0} };
 		const Polyline3D polyline(points);
-		const std::vector<Vector3D> v{ Point3D{ 1, 0, 0} };
-		ASSERT_EQ(v, polyline.segments());
+		const std::vector<Vector3D> refSegments{ Point3D{ 1, 0, 0} };
+		ASSERT_EQ(refSegments, polyline.segments());
 	}
 	{
 		const std::vector<Point3D> points{ {0, 0, 0} };
 		const Polyline3D polyline(points);
-		const std::vector<Vector3D> v;
-		ASSERT_EQ(v, polyline.segments());
+		const std::vector<Vector3D> refSegments;
+		ASSERT_EQ(refSegments, polyline.segments());
 	}
 	{
 		const std::vector<Point3D> points{ {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0} };
 		const Polyline3D polyline(points);
-		const std::vector<Vector3D> v{ Point3D{0, 0, 0}, Point3D{0, 0, 0}, Point3D{0, 0, 0} };
-		ASSERT_EQ(v, polyline.segments());
+		const std::vector<Vector3D> refSegments{ Point3D{0, 0, 0}, Point3D{0, 0, 0}, Point3D{0, 0, 0} };
+		ASSERT_EQ(refSegments, polyline.segments());
 	}
 }
 
@@ -114,7 +120,7 @@ TEST(polyline, findClosestDistance)
 		EXPECT_EQ(refPoints, closestPoints);
 	}
 	{
-		const std::vector<Point3D> points = { {0, 0 , 0}, {2, 0, 0}, {2, 2, 0}, {0, 2, 0}, {0, 0, 0} };
+		const std::vector<Point3D> points = { {0, 0, 0}, {2, 0, 0}, {2, 2, 0}, {0, 2, 0}, {0, 0, 0} };
 		const std::vector<PolylineInfo> refPoints{
 			{1, 1.41421, {1, 0, 0} },
 			{2, 1.41421, {2, 1, 0} },

@@ -15,6 +15,9 @@
 
 namespace pa
 {
+
+class Polyline3D;
+
 /// @brief Calculates project vectors vector1 to vector2
 ///
 /// @param[in] vector1 A first vector
@@ -64,5 +67,7 @@ bool operator==(const PolylineInfo& info1, const PolylineInfo& info2);
 /// @return Array of closest distances
 ///
 std::vector<PolylineInfo> findClosestDistance(const std::vector<Point3D>& points, const Point3D& point);
+
+Point3D findCenterOfPolyline(const Polyline3D& polyline);
 
 }  // namespace pa

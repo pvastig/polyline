@@ -1,40 +1,11 @@
-#include <fstream>
 #include <iostream>
-#include <sstream>
 
-#include "Utils.h"
 #include "MathUtils.h"
 #include "Point.h"
+#include "PointReaderUtils.h"
 
 namespace pa
 {
-
-std::vector<Point3D> readPointsFromFile(const std::filesystem::path& file)
-{
-	std::vector<Point3D> points;
-	if (std::ifstream ifs(file, std::ifstream::in); ifs)
-	{
-		double x, y, z;
-		while (ifs >> x >> y >> z)
-		{
-			points.emplace_back(Point3D{ x, y, z });
-		}
-	}
-
-	return points;
-}
-
-Point3D getPointsFromThirdArgument(std::string_view argument)
-{
-	std::stringstream is(argument.data());
-	if (double x, y, z;
-		is >> x >> y >> z)
-	{
-		return { x, y, z };
-	}
-
-	return {};
-}
 
 void print(const std::vector<PolylineInfo>& infos)
 {
@@ -50,12 +21,14 @@ void print(const std::vector<PolylineInfo>& infos)
 	}
 }
 
-void solveFirstTask(const std::filesystem::path& file, std::string_view pointArgument)
+void solveFirstTask(std::string_view fileName, std::string_view programArgument)
 {
-	const auto polylinePoints = readPointsFromFile(file);
-	const auto point = getPointsFromThirdArgument(pointArgument);
+	const Strategy<Point3DReader> reader(fileName, programArgument);
+	const auto polylinePoints = reader.readFromFile();
+	const auto point = reader.getPointFromProgramArgument();
 	const auto result = findClosestDistance(polylinePoints, point);
 	print(result);
+	
 }
 
 void  solveSecondTask(const std::filesystem::path&, std::string_view)

@@ -89,4 +89,21 @@ std::vector<PolylineInfo> findClosestDistance(const std::vector<Point3D>& points
 	return result;
 }
 
+Point3D findCenterOfPolyline(const Polyline3D& polyline)
+{
+	Point3D point;
+	size_t count = 0;
+	for (const auto& segment : polyline.segments())
+	{
+		point.x += segment.first().x;
+		point.y += segment.first().y;
+		point.z += segment.first().z;
+		++count;
+	}
+
+	const double d = 1. / count;
+
+	return point * d;
+}
+
 }  // namespace pa
