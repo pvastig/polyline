@@ -1,8 +1,8 @@
 #include <cassert>
 #include <iostream>
 
+#include "Point3D.h"
 #include "Common.h"
-#include "Point.h"
 
 namespace pa
 {

@@ -5,9 +5,9 @@
 #include "MathUtils.h"
 #include "Common.h"
 #include "Point2D.h"
-#include "Polyline.h"
-#include "Vector.h"
+#include "Polyline3D.h"
 #include "Vector2D.h"
+#include "Vector3D.h"
 
 namespace pa
 {

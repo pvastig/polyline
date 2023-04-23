@@ -4,8 +4,8 @@
 
 #include "PointReaderUtils.h"
 #include "MathUtils.h"
-#include "Point.h"
 #include "Point2D.h"
+#include "Point3D.h"
 
 namespace pa
 {

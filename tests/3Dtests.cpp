@@ -1,8 +1,8 @@
 #include "Common.h"
 #include "MathUtils.h"
-#include "Point.h"
-#include "Polyline.h"
-#include "Vector.h"
+#include "Point3D.h"
+#include "Polyline3D.h"
+#include "Vector3D.h"
 
 #include <gtest/gtest.h>
 

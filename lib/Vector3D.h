@@ -9,7 +9,7 @@
 
 #include <iosfwd>
 
-#include "Point.h"
+#include "Point3D.h"
 
 namespace pa
 {

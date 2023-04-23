@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "MathUtils.h"
-#include "Point.h"
+#include "Point3D.h"
 #include "PointReaderUtils.h"
 
 namespace pa

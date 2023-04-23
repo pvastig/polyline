@@ -1,6 +1,6 @@
-#include "Polyline.h"
-#include "Point.h"
-#include "Vector.h"
+#include "Polyline3D.h"
+#include "Point3D.h"
+#include "Vector3D.h"
 
 namespace pa
 {
