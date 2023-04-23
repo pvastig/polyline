@@ -14,7 +14,7 @@ bool isDoublesEqual(const double value1, const double value2)
 	return fabs(value1 - value2) <= epsilon;
 }
 
-TEST(polyline, Point3D)
+TEST(polyline3D, Point3D)
 {
 	{
 		Point3D p1;
@@ -48,7 +48,7 @@ TEST(polyline, Point3D)
 	}
 }
 
-TEST(polyline, dotProduct)
+TEST(polyline3D, dotProduct)
 {
 	{
 		const auto project = findProjectVector(Vector3D(Point3D{ 1, 0, 0 }, Point3D()), Vector3D(Point3D{ 0, 1, 0 }, Point3D()));
@@ -70,7 +70,7 @@ TEST(polyline, dotProduct)
 	}
 }
 
-TEST(polyline, createPolyline)
+TEST(polyline3D, createPolyline)
 {
 	{
 		const std::vector<Point3D> points;
@@ -110,7 +110,7 @@ TEST(polyline, createPolyline)
 	}
 }
 
-TEST(polyline, findClosestDistance)
+TEST(polyline3D, findClosestDistance)
 {
 	{
 		const std::vector<Point3D> points{ {0, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 1} };

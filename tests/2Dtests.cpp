@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "MathUtils.h"
 #include "Point2D.h"
+#include "Polyline2D.h"
 #include "Vector2D.h"
 
 #include <gtest/gtest.h>
@@ -42,20 +43,67 @@ TEST(polyline2D, Point2D)
 	}
 }
 
+TEST(polyline2D, createPolyline)
+{
+	{
+		const std::vector<Point2D> points{ {0, 0}, {1, 0}, {2, 1}, {3, 1} };
+		const Polyline2D polyline(points);
+		const std::vector<Vector2D> refSegments{ Point2D{1, 0}, Point2D{1, 1}, Point2D{1, 0} };
+		ASSERT_EQ(refSegments, polyline.segments());
+	}
+	{
+		const std::vector<Point2D> points{ {0, 0}, {1, 0}, {2, 1} };
+		const Polyline2D polyline(points);
+		const std::vector<Vector2D> refSegments{ Point2D{ 1, 0}, Point2D{1, 1} };
+		ASSERT_EQ(refSegments, polyline.segments());
+	}
+	{
+		const std::vector<Point2D> points{ {0, 0}, {1, 0} };
+		const Polyline2D polyline(points);
+		const std::vector<Vector2D> refSegments{ Point2D{1, 0} };
+		ASSERT_EQ(refSegments, polyline.segments());
+	}
+	{
+		const std::vector<Point2D> points{ {0, 0} };
+		const Polyline2D polyline(points);
+		const std::vector<Vector2D> refSegments;
+		ASSERT_EQ(refSegments, polyline.segments());
+	}
+	{
+		const std::vector<Point2D> points{ {0, 0}, {0, 0}, {0, 0}, {0, 0} };
+		const Polyline2D polyline(points);
+		const std::vector<Vector2D> refSegments{ Point2D{0, 0}, Point2D{0, 0}, Point2D{0, 0} };
+		ASSERT_EQ(refSegments, polyline.segments());
+	}
+}
+
 TEST(polyline2D, dotProduct)
 {
 }
 
+TEST(polyline2D, isClosed)
+{
+	{
+		Polyline2D polyline({ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0,1 }, { 0, 0 } });
+		ASSERT_TRUE(polyline.isClosed());
+	}
+	{
+		Polyline2D polyline({ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } });
+		ASSERT_FALSE(polyline.isClosed());
+	}
+}
+
+
 TEST(polyline2D, findCenterOfPolyline)
 {
-	const auto point = findCenterOfPolyline({ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0,1 } });
+	const auto point = findCenterOfPolyline({ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } });
 	const Point2D refPoint{ 0.5, 0.5 };
 	ASSERT_EQ(point, refPoint);
 }
 
 TEST(polyline2D, buildAllPaths)
 {
-	const auto paths = buildAllPaths({ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0,1 } });
+	const auto paths = buildAllPaths({ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } });
 	const auto edges = calculateEdges(paths, { 0.5, 0.5 });
 }
 
