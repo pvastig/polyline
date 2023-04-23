@@ -20,7 +20,6 @@ struct Point3D;
 
 struct Point2DReader
 {
-
 	/// @brief Reads 2D points from a file
 	///
 	/// @param[in] file File where points is kept
@@ -41,7 +40,6 @@ struct Point2DReader
 
 struct Point3DReader
 {
-
 	/// @brief Reads 3D point from a file
 	///
 	/// @param[in] file File where points is kept
@@ -65,7 +63,6 @@ class Strategy
 {
 
 public:
-
 	Strategy(std::string_view fileName, std::string_view programArgument)
 		: m_fileName(fileName), m_programArgument(programArgument)
 

@@ -2,6 +2,7 @@
 #include "MathUtils.h"
 #include "Point.h"
 #include "Polyline.h"
+#include "Vector.h"
 
 #include <gtest/gtest.h>
 

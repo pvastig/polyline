@@ -4,7 +4,10 @@
 
 #include "MathUtils.h"
 #include "Common.h"
+#include "Point2D.h"
 #include "Polyline.h"
+#include "Vector.h"
+#include "Vector2D.h"
 
 namespace pa
 {
@@ -89,21 +92,53 @@ std::vector<PolylineInfo> findClosestDistance(const std::vector<Point3D>& points
 	return result;
 }
 
-Point3D findCenterOfPolyline(const Polyline3D& polyline)
+std::optional<Point2D> findCenterOfPolyline(const std::vector<Point2D>& points)
 {
-	Point3D point;
-	size_t count = 0;
-	for (const auto& segment : polyline.segments())
+	int pointCount = 0;
+	Point2D point;
+	for (const auto& [x, y] : points)
 	{
-		point.x += segment.first().x;
-		point.y += segment.first().y;
-		point.z += segment.first().z;
-		++count;
+		point.x += x;
+		point.y += y;
+		++pointCount;
 	}
 
-	const double d = 1. / count;
+	if (pointCount != 0)
+	{
+		return point / pointCount;
+	}
 
-	return point * d;
+	return std::nullopt;
+}
+
+std::vector<Vector2D> buildAllPaths(const std::vector<Point2D>& points)
+{
+	std::vector<Vector2D> vectors;
+	for (const auto& point1 : points)
+	{
+		for (const auto& point2 : points)
+		{
+			vectors.emplace_back(point1, point2);
+		}
+	}
+
+	return vectors;
+}
+
+std::vector<Vector2D> calculateEdges(const std::vector<Vector2D>& vectors, const Point2D& point)
+{
+	std::vector<Vector2D> edges;
+	for (const auto& vector : vectors)
+	{
+		const auto& first = vector.first();
+		const auto value = vector.dot(Vector2D{ first, point });
+		if(value == 1.0)
+		{
+			edges.push_back(vector);
+		}
+	}
+
+	return edges;
 }
 
 }  // namespace pa

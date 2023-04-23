@@ -2,7 +2,7 @@
  \file
  \authors Astigeevich Pavel
  \warning Uses only for studying
- \brief The file contains description of 3 dimension class Point and operations
+ \brief The file contains description of 2 dimension class Point and operations
 */
 
 #pragma once
@@ -12,21 +12,30 @@
 namespace pa
 {
 
-struct Point3D
+struct Point2D
 {
-	/// @brief Adds coordinate of point to stream
-	///
-	/// @param[in,out] os A stream
-	///
-	/// @param[in] point A point
-	///
-	/// @return Modified stream
-	///
-	friend std::ostream& operator<<(std::ostream& os, const Point3D& point);
+/// @brief Adds coordinate of point to stream
+///
+/// @param[in,out] os A stream
+///
+/// @param[in] point A point
+///
+/// @return Modified stream
+///
+	friend std::ostream& operator<<(std::ostream& os, const Point2D& point);
 	double x{};
 	double y{};
-	double z{};
 };
+
+/// @brief Divides coordinates of point into value
+///
+/// @param[in] point A point
+///
+/// @param value A value
+///
+/// @return Calculated point
+///
+Point2D operator/(const Point2D& point, double value);
 
 /// @brief Checks if 2 points are equal
 ///
@@ -36,7 +45,7 @@ struct Point3D
 ///
 /// @return true if they are equal, otherwise - false
 ///
-bool operator==(const Point3D& point1, const Point3D& point2);
+bool operator==(const Point2D& point1, const Point2D& point2);
 
 /// @brief Checks if 2 points are not equal
 ///
@@ -46,7 +55,7 @@ bool operator==(const Point3D& point1, const Point3D& point2);
 ///
 /// @return true if they are equal, otherwise - false
 ///
-bool operator!=(const Point3D& point1, const Point3D& point2);
+bool operator!=(const Point2D& point1, const Point2D& point2);
 
 /// @brief Subtracts coordinates of second point from first one
 ///
@@ -56,7 +65,7 @@ bool operator!=(const Point3D& point1, const Point3D& point2);
 ///
 /// @return Subtracted point
 ///
-Point3D operator-(const Point3D& point1, const Point3D& point2);
+Point2D operator-(const Point2D& point1, const Point2D& point2);
 
 /// @brief Adds coordinates of second point to first one
 ///
@@ -66,7 +75,7 @@ Point3D operator-(const Point3D& point1, const Point3D& point2);
 ///
 /// @return Added point
 ///
-Point3D operator+(const Point3D& point1, const Point3D& point2);
+Point2D operator+(const Point2D& point1, const Point2D& point2);
 
 /// @brief Multiplies value on coordinates of point like the { Point * value }
 ///
@@ -76,7 +85,7 @@ Point3D operator+(const Point3D& point1, const Point3D& point2);
 ///
 /// @return Calculated point
 ///
-Point3D operator*(const Point3D& point, double value);
+Point2D operator*(const Point2D& point, double value);
 
 /// @brief Multiplies value on coordinates of point like the { value * Point }
 ///
@@ -86,6 +95,6 @@ Point3D operator*(const Point3D& point, double value);
 ///
 /// @return Calculated point
 ///
-Point3D operator*(double value, const Point3D& point);
+Point2D operator*(double value, const Point2D& point);
 
 }  // namespace pa
