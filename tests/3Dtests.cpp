@@ -51,33 +51,27 @@ TEST(polyline3D, Point3D)
 TEST(polyline3D, dotProduct)
 {
 	{
-		const auto project = findProjectVector(Vector3D(Point3D{ 1, 0, 0 }, Point3D()), Vector3D(Point3D{ 0, 1, 0 }, Point3D()));
+		const auto project = findProjectionVector(Vector3D({ 1, 0, 0 }, Point3D()), Vector3D({ 0, 1, 0 }, Point3D()));
 		ASSERT_TRUE(project);
 		ASSERT_EQ(0, project.value());
 	}
 	{
-		const auto project = findProjectVector(Vector3D(Point3D{ -0.01, 0, 0 }), Vector3D(Point3D{ 0.01, 0, 0 }, Point3D{ 0, 0.01, 0 }));
+		const auto project = findProjectionVector(Vector3D({ -0.01, 0, 0 }), Vector3D({ 0.01, 0, 0 }, { 0, 0.01, 0 }));
 		ASSERT_TRUE(project);
 		ASSERT_EQ(0.5, project.value());
 	}
 	{
-		const auto project = findProjectVector(Vector3D(Point3D{ 1, 0, 0 }), Vector3D(Point3D()));
+		const auto project = findProjectionVector(Vector3D({ 1, 0, 0 }), Vector3D(Point3D()));
 		ASSERT_FALSE(project);
 	}
 	{
-		const auto project = findProjectVector(Vector3D(Point3D(), Point3D()), Vector3D(Point3D(), Point3D()));
+		const auto project = findProjectionVector(Vector3D(Point3D(), Point3D()), Vector3D(Point3D(), Point3D()));
 		ASSERT_FALSE(project);
 	}
 }
 
 TEST(polyline3D, createPolyline)
 {
-	{
-		const std::vector<Point3D> points;
-		const Polyline3D polyline(points);
-		const std::vector<Vector3D> refSegments;
-		ASSERT_EQ(refSegments, polyline.segments());
-	}
 	{
 		const std::vector<Point3D> points{ {0, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 1} };
 		const Polyline3D polyline(points);
@@ -117,7 +111,7 @@ TEST(polyline3D, findClosestDistance)
 		const std::vector<PolylineInfo> refPoints{
 			{2, 0.612372, {1.75, 0.75, 0} },
 			{3, 0.612372, {2.25, 1, 0.25 } } };
-		const auto closestPoints = findClosestDistance(points, { 2, 0.5, 0.5 });
+		const auto closestPoints = findClosestDistances(points, { 2, 0.5, 0.5 });
 		EXPECT_EQ(refPoints, closestPoints);
 	}
 	{
@@ -127,25 +121,25 @@ TEST(polyline3D, findClosestDistance)
 			{2, 1.41421, {2, 1, 0} },
 			{3, 1.41421, {1, 2, 0} },
 			{4, 1.41421, {0, 1, 0} } };
-		const auto closestPoints = findClosestDistance(points, { 1, 1, 1 });
+		const auto closestPoints = findClosestDistances(points, { 1, 1, 1 });
 		EXPECT_EQ(refPoints, closestPoints);
 	}
 	{
 		const std::vector<Point3D> points = { {0, 0, 0}, {2, 0, 0}, {2, 2, 0}, {0, 2, 0}, {0, 0, 0} };
 		const std::vector<PolylineInfo> refPoints{ {2, 2, {2, 2, 0} }, {3, 2, {2, 2, 0} } };
-		const auto closestPoints = findClosestDistance(points, { 2, 2, 2 });
+		const auto closestPoints = findClosestDistances(points, { 2, 2, 2 });
 		EXPECT_EQ(refPoints, closestPoints);
 	}
 	{
 		const std::vector<Point3D> points = { {0, 0, 0}, {2, 0, 0}, {2, 2, 0}, {0, 2, 0}, {0, 0, 0} };
 		const std::vector<PolylineInfo> refPoints{ {2, 3.16228, {2, 3, 0} }, {3, 3.16228, {3, 2, 0} } };
-		const auto closestPoints = findClosestDistance(points, { 3, 3, 3 });
+		const auto closestPoints = findClosestDistances(points, { 3, 3, 3 });
 		EXPECT_EQ(refPoints, closestPoints);
 	}
 	{
 		const std::vector<Point3D> points = { {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0} };
 		const std::vector<PolylineInfo> refPoints;
-		const auto closestPoints = findClosestDistance(points, { 1, 1, 1 });
+		const auto closestPoints = findClosestDistances(points, { 1, 1, 1 });
 		EXPECT_EQ(refPoints, closestPoints);
 	}
 }

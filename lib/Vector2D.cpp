@@ -55,6 +55,12 @@ double Vector2D::dot(const Vector2D& vector) const
 	return dotProduct;
 }
 
+const Vector2D& Vector2D::normalize()
+{
+	m_coord = m_coord / getLength();
+	return *this;
+}
+
 std::ostream& operator<<(std::ostream& os, const Vector2D& vector)
 {
 	os << vector.getCoord();

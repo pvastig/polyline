@@ -61,15 +61,15 @@ public:
 	///
 	const Point2D& last() const;
 
-	/// @brief Calculates length of vector
+	/// @brief Calculates getLength of vector
 	///
 	/// @return Length of vector
 	///
 	double getLength() const;
 
-	/// @brief Calculates length of vector without taking square root
+	/// @brief Calculates getLength of vector without taking square root
 	///
-	/// @return Square length of vector
+	/// @return Square getLength of vector
 	///
 	double getLengthWithoutSqrt() const;
 
@@ -80,6 +80,8 @@ public:
 	/// @return Calculated value
 	///
 	double dot(const Vector2D& vector) const;
+
+	const Vector2D& normalize();
 
 private:
 	Point2D m_first;

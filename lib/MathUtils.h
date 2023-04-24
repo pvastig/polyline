@@ -9,8 +9,10 @@
 
 #include <iosfwd>
 #include <optional>
+#include <unordered_set>
 #include <vector>
 
+#include "Common.h"
 #include "Point3D.h"
 
 namespace pa
@@ -20,7 +22,9 @@ struct Point2D;
 class Vector2D;
 class Vector3D;
 
-/// @brief Calculates project vectors vector1 to vector2
+/// @brief Calculates projections vectors - vector1 to vector2
+///
+/// @tparam TVector Type of Vector, Vector2D or Vector3D
 ///
 /// @param[in] vector1 A first vector
 ///
@@ -28,9 +32,27 @@ class Vector3D;
 ///
 /// @return Normalized value if exists, otherwise nullopt
 ///
-std::optional<double> findProjectVector(const Vector3D& vector1, const Vector3D& vector2);
+template<typename TVector> // TODO: add supporting concepts
+std::optional<double> findProjectionVector(const TVector& vector1, const TVector& vector2)
+{
+	const auto dotProduct = vector1.dot(vector2);
+	//const double getLength = vector2.getLength() * vector2.getLength(); 2 times "sqrt(value) * sqrt(value) = value"
+	const double length = vector2.getLengthWithoutSqrt(); // replacing value without multiply sqrt
 
-/// @brief Finds project to vector
+	if (length <= epsilon)
+	{
+		return std::nullopt;
+	}
+	const auto value = dotProduct / length;
+
+	return value;
+}
+
+/// @brief Finds projection of point to vector
+///
+/// @tparam TVector Type of Vector, Vector2D or Vector3D
+///
+/// @tparam TPoint Type of Point, Point2D or Point3D
 ///
 /// @param[in] vector A vector
 ///
@@ -38,7 +60,18 @@ std::optional<double> findProjectVector(const Vector3D& vector1, const Vector3D&
 ///
 /// @return Point if it exists, otherwise nullopt
 ///
-std::optional<Point3D> findProjectPointToVector(const Vector3D& vector, const Point3D& point);
+template<typename TVector, typename TPoint> // TODO: add supporting concepts
+std::optional<TPoint> findProjectionPointToVector(const TVector& vector, const TPoint& point)
+{
+	const auto& firstVectorPoint = vector.first();
+	const TVector vectorToPoint(firstVectorPoint, point);
+	if (const auto projection = findProjectionVector(vectorToPoint, vector))
+	{
+		return firstVectorPoint + projection.value() * vector.getCoord();
+	}
+
+	return std::nullopt;
+}
 
 /// @brief Describes common information about polynom and projected point
 ///
@@ -68,12 +101,38 @@ bool operator==(const PolylineInfo& info1, const PolylineInfo& info2);
 ///
 /// @return Array of closest distances
 ///
-std::vector<PolylineInfo> findClosestDistance(const std::vector<Point3D>& points, const Point3D& point);
+std::vector<PolylineInfo> findClosestDistances(const std::vector<Point3D>& points, const Point3D& point);
 
+/// @brief Finds centre point of polyline
+///
+/// @param[in] points An array of 2D points
+///
+/// @return 2D centre point
+///
 std::optional<Point2D> findCenterOfPolyline(const std::vector<Point2D>& points);
 
-std::vector<Vector2D> buildAllPaths(const std::vector<Point2D>& points);
+/// @brief Defines custom hasher for unordered set
+///
+struct HashValSet
+{
+	std::size_t operator()(const Vector2D& vector) const;
+};
 
-std::vector<Vector2D> calculateEdges(const std::vector<Vector2D>& vectors, const Point2D& point);
+/// @brief Defines custom comparator for unordered set
+///
+struct CustomCompareSet
+{
+	bool operator()(const Vector2D& vector1, const Vector2D& vector2) const;
+};
+
+using vector2D_set = std::unordered_set<Vector2D, HashValSet, CustomCompareSet>;
+
+/// @brief Calculates symmetry axes using points array
+///
+/// @param points An array of 2D points
+///
+/// @return Unordered set of axes
+///
+vector2D_set calculateSymmetryAxes(const std::vector<Point2D>& points);
 
 }  // namespace pa

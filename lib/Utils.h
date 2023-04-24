@@ -11,6 +11,8 @@
 #include <string_view>
 #include <vector>
 
+#include "MathUtils.h"
+
 namespace pa
 {
 
@@ -29,10 +31,14 @@ void print(const std::vector<PolylineInfo>& infos);
 ///
 /// @param[in] fileName A file containing polyline points
 ///
-/// @param[in] programArgument An argument for input point
+/// @param[in] argument An argument for an input point
 ///
-void solveFirstTask(std::string_view fileName, std::string_view programArgument);
+void solveFirstTask(std::string_view fileName, std::string_view argument);
 
-void solveSecondTask(const std::filesystem::path& file, std::string_view pointArgument);
+/// @brief Solves second task
+///
+/// @param[in] fileName A file containing polyline points
+///
+void solveSecondTask(std::string_view fileName);
 
 }  // namespace pa

@@ -1,43 +1,17 @@
+#include <cassert>
 #include <cmath>
 #include <iostream>
 #include <set>
 
 #include "MathUtils.h"
-#include "Common.h"
 #include "Point2D.h"
+#include "Polyline2D.h"
 #include "Polyline3D.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
 
 namespace pa
 {
-
-std::optional<double> findProjectVector(const Vector3D& vector1, const Vector3D& vector2)
-{
-	const auto dotProduct = vector1.dot(vector2);
-	//const double length = vector2.getLength() * vector2.getLength(); 2 times "sqrt(value) * sqrt(value) = value"
-	const double length = vector2.getLengthWithoutSqrt(); // replacing value without multiply sqrt
-
-	if (length <= epsilon)
-	{
-		return std::nullopt;
-	}
-	const auto value = dotProduct / length;
-
-	return value;
-}
-
-std::optional<Point3D> findProjectPointToVector(const Vector3D& vector, const Point3D& point)
-{
-	const auto& firstVectorPoint = vector.first();
-	const Vector3D vectorToPoint(firstVectorPoint, point);
-	if (const auto project = findProjectVector(vectorToPoint, vector))
-	{
-		return firstVectorPoint + project.value() * vector.getCoord();
-	}
-
-	return std::nullopt;
-}
 
 std::ostream& operator<<(std::ostream& os, const PolylineInfo& info)
 {
@@ -52,9 +26,9 @@ bool operator==(const PolylineInfo& info1, const PolylineInfo& info2)
 		info1.closestPoint == info2.closestPoint;
 }
 
-/// @brief Defines custom comparator for std::multiset
+/// @brief Defines custom Comparator for std::multiset
 ///
-struct comparator
+struct ComparatorMultiset
 {
 	bool operator()(const PolylineInfo& l, const PolylineInfo& r) const
 	{
@@ -62,18 +36,18 @@ struct comparator
 	}
 };
 
-std::vector<PolylineInfo> findClosestDistance(const std::vector<Point3D>& points, const Point3D& point)
+std::vector<PolylineInfo> findClosestDistances(const std::vector<Point3D>& points, const Point3D& point)
 {
 	const Polyline3D polyline(points);
-	std::multiset <PolylineInfo, comparator> infoSet;
+	std::multiset <PolylineInfo, ComparatorMultiset> infoSet;
 	for (size_t segmentCount = 0; const auto& segment : polyline.segments())
 	{
-		if (const auto pointOfProject = findProjectPointToVector(segment, point))
+		if (const auto pointOfProjection = findProjectionPointToVector(segment, point))
 		{
 			PolylineInfo info;
 			info.segmentCount = ++segmentCount;
-			info.closestDistance = Vector3D(point, pointOfProject.value()).getLength();
-			info.closestPoint = pointOfProject.value();
+			info.closestDistance = Vector3D(point, pointOfProjection.value()).getLength();
+			info.closestPoint = pointOfProjection.value();
 
 			infoSet.insert(std::move(info));
 		}
@@ -111,34 +85,92 @@ std::optional<Point2D> findCenterOfPolyline(const std::vector<Point2D>& points)
 	return std::nullopt;
 }
 
-std::vector<Vector2D> buildAllPaths(const std::vector<Point2D>& points)
+std::size_t HashValSet::operator()(const Vector2D& vector) const
 {
-	std::vector<Vector2D> vectors;
-	for (const auto& point1 : points)
-	{
-		for (const auto& point2 : points)
-		{
-			vectors.emplace_back(point1, point2);
-		}
-	}
-
-	return vectors;
+	return std::hash<double>{}(vector.getLengthWithoutSqrt());
 }
 
-std::vector<Vector2D> calculateEdges(const std::vector<Vector2D>& vectors, const Point2D& point)
+bool CustomCompareSet::operator()(const Vector2D& vector1, const Vector2D& vector2) const
 {
-	std::vector<Vector2D> edges;
-	for (const auto& vector : vectors)
+	// TODO: defined operator -Vector;
+	return vector1.getCoord() == (-1 * vector2.getCoord());
+}
+
+bool isAxis(Vector2D vector, const Point2D& point)
+{
+	Vector2D vectorToCentre{ vector.first(), point };
+
+	assert(vectorToCentre.getLengthWithoutSqrt() != 0.);
+	if (vector.getLengthWithoutSqrt() == 0.)
 	{
-		const auto& first = vector.first();
-		const auto value = vector.dot(Vector2D{ first, point });
-		if(value == 1.0)
+		return false;
+	}
+
+	// skip a vector whose length is less than length of a vector to centre point
+	if (const bool isVectorLessThanVectorToPoint = vector.getLength() - vectorToCentre.getLength() < epsilon)
+	{
+		return false;
+	}
+
+	vectorToCentre.normalize();
+	vector.normalize();
+
+	const auto dotValue = vector.dot(vectorToCentre);
+	return 1. - dotValue <= epsilon;
+}
+
+vector2D_set calculateSymmetryAxes(const std::vector<Point2D>& points)
+{
+	const Polyline2D polyline(points);
+	const auto centrePoint = findCenterOfPolyline(points);
+	assert(centrePoint);
+	if (!centrePoint)
+	{
+		return {};
+	}
+
+	std::vector<Point2D> projections;
+	auto addProjectionsToArray = [&projections, centrePoint](auto&& segment)
+	{
+		if (const auto pointOfProject = findProjectionPointToVector(segment, centrePoint.value()))
 		{
-			edges.push_back(vector);
+			projections.push_back(pointOfProject.value());
+		}
+	};
+
+	for (const auto& segment : polyline.segments())
+	{
+		addProjectionsToArray(segment);
+	}
+
+	// It needs to find addition projection point in case not closed polyline 
+	if (!polyline.isClosed())
+	{
+		addProjectionsToArray(Vector2D(polyline.segments().front().first(), polyline.segments().back().last()));
+	}
+
+	vector2D_set axes;
+	std::vector allPoints(points);
+
+	allPoints.reserve(points.size() + projections.size());
+	allPoints.insert(allPoints.end(), projections.begin(), projections.end());
+
+	// It would be better to use direct graph to reduce count of vectors, now it is not enough time to consider it
+	// TODO: improve building all vectors using direct graph
+	// Works ~O(N^2 * O(1)), additional memory: ~N, allocated nodes of unordered_set
+	for (const auto& point1 : allPoints)
+	{
+		for (auto point2It = allPoints.rbegin(); point2It != allPoints.crend(); ++point2It)
+		{
+			if (Vector2D vector(point1, *point2It);
+				isAxis(vector, centrePoint.value()))
+			{
+				axes.insert(vector);
+			}
 		}
 	}
 
-	return edges;
+	return axes;
 }
 
 }  // namespace pa

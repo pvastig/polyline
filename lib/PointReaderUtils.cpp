@@ -10,10 +10,19 @@
 namespace pa
 {
 
-std::vector<Point2D> Point2DReader::readPointsFromFile(const std::filesystem::path& file)
+Point2DReader::Point2DReader(std::string_view fileName)
+	: m_file(fileName)
+{
+	if (!std::filesystem::exists(m_file))
+	{
+		throw std::invalid_argument("The file \"" + m_file.string() + "\" does not exist");
+	}
+}
+
+std::vector<Point2D> Point2DReader::getPointsFromFile() const
 {
 	std::vector<Point2D> points;
-	if (std::ifstream ifs(file, std::ifstream::in); ifs)
+	if (std::ifstream ifs(m_file, std::ifstream::in); ifs)
 	{
 		double x{}, y{};
 		while (ifs >> x >> y)
@@ -25,22 +34,25 @@ std::vector<Point2D> Point2DReader::readPointsFromFile(const std::filesystem::pa
 	return points;
 }
 
-Point2D Point2DReader::getPointFromProgramArgument(std::string_view argument)
+Point3DReader::Point3DReader(std::string_view fileName, std::string_view programArgument)
+	:m_file(fileName), m_argument(programArgument)
 {
-	std::stringstream is(argument.data());
-	if (double x{}, y{};
-		is >> x >> y)
+	if (const std::filesystem::path file(fileName);
+		!std::filesystem::exists(file))
 	{
-		return { x, y };
+		throw std::invalid_argument("The file \"" + file.string() + "\" does not exist");
 	}
 
-	return {};
+	if (programArgument.empty())
+	{
+		throw std::invalid_argument("The 3th argument is empty");
+	}
 }
 
-std::vector<Point3D> Point3DReader::readPointsFromFile(const std::filesystem::path& file)
+std::vector<Point3D> Point3DReader::getPointsFromFile()const
 {
 	std::vector<Point3D> points;
-	if (std::ifstream ifs(file, std::ifstream::in); ifs)
+	if (std::ifstream ifs(m_file, std::ifstream::in); ifs)
 	{
 		double x, y, z;
 		while (ifs >> x >> y >> z)
@@ -52,9 +64,9 @@ std::vector<Point3D> Point3DReader::readPointsFromFile(const std::filesystem::pa
 	return points;
 }
 
-Point3D Point3DReader::getPointFromProgramArgument(std::string_view argument)
+Point3D Point3DReader::getPointFromArgument() const
 {
-	std::stringstream is(argument.data());
+	std::stringstream is(m_argument.data());
 	if (double x, y, z;
 		is >> x >> y >> z)
 	{
@@ -63,7 +75,5 @@ Point3D Point3DReader::getPointFromProgramArgument(std::string_view argument)
 
 	return {};
 }
-
-
 
 }  // namespace pa

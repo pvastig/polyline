@@ -1,4 +1,3 @@
-#include <filesystem>
 #include <iostream>
 
 #include "Utils.h"
@@ -9,7 +8,7 @@ int main(const int argc, char** argv)
 	{
 		if (argc != 3)
 		{
-			throw std::invalid_argument("2 arguments should be input: file with polyline points and coordinates of the point to be projected.");
+			throw std::invalid_argument("Wrong number of arguments, using: " + std::string(argv[0]) + " points.txt \"1 1 1\"");
 		}
 
 		pa::solveFirstTask(argv[1], argv[2]);

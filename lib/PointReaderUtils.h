@@ -17,81 +17,69 @@ namespace pa
 struct Point2D;
 struct Point3D;
 
-
-struct Point2DReader
+template<typename TPoint>
+class IFileReader
 {
-	/// @brief Reads 2D points from a file
+public:
+	virtual std::vector<TPoint> getPointsFromFile() const = 0;
+	virtual ~IFileReader() = default;
+};
+
+template<typename TPoint>
+class IArgumetParser
+{
+public:
+	virtual TPoint getPointFromArgument() const = 0;
+	virtual ~IArgumetParser() = default;
+};
+
+class Point2DReader : public IFileReader<Point2D>
+{
+public:
+	/// @brief Constructs object for reading 2D points
 	///
-	/// @param[in] file File where points is kept
+	///	@note Can throw exception if file does not exist
+	///
+	/// @param[in] fileName An Absolute file name where points is kept
+	///
+	Point2DReader(std::string_view fileName);
+
+	/// @brief Reads 2D points from a file
 	///
 	/// @return Vector of 2D points
 	///
-	static std::vector<Point2D> readPointsFromFile(const std::filesystem::path& file);
+	std::vector<Point2D> getPointsFromFile() const override;
 
-	/// @brief Gets point from a 3th program argument
-	///
-	/// @param[in] argument An command line argument
-	///
-	/// @return 2D point
-	///
-	static Point2D getPointFromProgramArgument(std::string_view argument);
-
+private:
+	std::filesystem::path m_file;
 };
 
-struct Point3DReader
+class Point3DReader : public IFileReader<Point3D>, public IArgumetParser<Point3D>
 {
-	/// @brief Reads 3D point from a file
+public:
+	/// @brief Constructs object for reading 3D points
 	///
-	/// @param[in] file File where points is kept
+	/// @param[in] fileName An Absolute file name where points is kept
+	///
+	/// @param[in] argument  Program argument for getting point
+	///
+	Point3DReader(std::string_view fileName, std::string_view argument);
+
+	/// @brief Reads 3D point from a file
 	///
 	/// @return Vector of 3D points
 	///
-	static std::vector<Point3D> readPointsFromFile(const std::filesystem::path& file);
+	std::vector<Point3D> getPointsFromFile() const override;
 
 	/// @brief Gets point from a 3th argument
 	///
-	/// @param[in] programArgument An command line program argument
-	///
 	/// @return 3D point
 	///
-	static Point3D getPointFromProgramArgument(std::string_view programArgument);
-
-};
-
-template<typename TPointReader>
-class Strategy
-{
-
-public:
-	Strategy(std::string_view fileName, std::string_view programArgument)
-		: m_fileName(fileName), m_programArgument(programArgument)
-
-	{
-		if (const std::filesystem::path file(fileName);
-			!std::filesystem::exists(file))
-		{
-			throw std::invalid_argument("The file \"" + file.string() + "\" does not exist");
-		}
-
-		if (programArgument.empty())
-		{
-			throw std::invalid_argument("The 3th argument is empty");
-		}
-	}
-
-	auto readFromFile() const
-	{
-		return TPointReader::readPointsFromFile(m_fileName);
-	}
-
-	auto getPointFromProgramArgument() const
-	{
-		return TPointReader::getPointFromProgramArgument(m_programArgument);
-	}
+	Point3D getPointFromArgument() const override;
 
 private:
-	std::string_view m_fileName;
-	std::string_view m_programArgument;
+	std::filesystem::path m_file;
+	std::string_view m_argument;
 };
 
 }  // namespace pa
