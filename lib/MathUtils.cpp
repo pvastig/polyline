@@ -157,7 +157,7 @@ vector2D_set calculateSymmetryAxes(const std::vector<Point2D>& points)
 
 	// It would be better to use direct graph to reduce count of vectors, now it is not enough time to consider it
 	// TODO: improve building all vectors using direct graph
-	// Works ~O(N^2 * O(1)), additional memory: ~N, allocated nodes of unordered_set
+	// Complexity: ~O(N^2 * O(1)), additional memory: ~N, allocated nodes of unordered_set
 	for (const auto& point1 : allPoints)
 	{
 		for (auto point2It = allPoints.rbegin(); point2It != allPoints.crend(); ++point2It)
