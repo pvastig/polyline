@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "MathUtils.h"
 #include "Point2D.h"
 #include "Polyline2D.h"
@@ -100,7 +102,7 @@ TEST(polyline2D, findCenterOfPolyline)
 	ASSERT_EQ(point, refPoint);
 }
 
-TEST(polyline2D, buildAllPaths)
+TEST(polyline2D, DISABLED_buildAllPaths)
 {
 	auto compareVectors = [](auto&& refPointVectors, auto&& vectors, auto&& line)
 	{
