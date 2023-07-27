@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "Common.h"
 #include "MathUtils.h"
 #include "Point3D.h"

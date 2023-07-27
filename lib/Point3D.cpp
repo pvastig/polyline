@@ -1,4 +1,4 @@
-#include <cassert>
+#include <cmath>
 #include <iostream>
 
 #include "Point3D.h"
