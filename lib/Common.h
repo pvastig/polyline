@@ -2,7 +2,7 @@
  \file
  \authors Astigeevich Pavel
  \warning Uses only for studying
- \brief The file contains common values, or constants
+ \brief The file contains common values, constants
 */
 
 #pragma once

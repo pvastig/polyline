@@ -17,30 +17,34 @@ namespace pa
 struct Point2D;
 struct Point3D;
 
-template<typename TPoint>
+/// @brief Uses CRTP idiom instead of virtual inheratence
+///
+/// @tparam Derived Template class is to be implemented
+///
+template <typename Derived>
 class IFileReader
 {
 public:
-	virtual std::vector<TPoint> getPointsFromFile() const = 0;
-	virtual ~IFileReader() = default;
+	template<typename TPoint>
+	std::vector<TPoint> getFromFile() const { return static_cast<const Derived* const>(this)->getFromFile(); }
 };
 
-template<typename TPoint>
-class IArgumetParser
+template <typename Derived>
+class IArgumetReader
 {
 public:
-	virtual TPoint getPointFromArgument() const = 0;
-	virtual ~IArgumetParser() = default;
+	template<typename TPoint>
+	TPoint getFromArgument() const { static_cast<const Derived* const>(this)->getFromArgument(); }
 };
 
-class Point2DReader : public IFileReader<Point2D>
+class Point2DReader : public IFileReader<Point2DReader>
 {
 public:
 	/// @brief Constructs object for reading 2D points
 	///
 	///	@note Can throw exception if file does not exist
 	///
-	/// @param[in] fileName An Absolute file name where points is kept
+	/// @param[in] fileName An absolute file name where points is kept
 	///
 	Point2DReader(std::string_view fileName);
 
@@ -48,20 +52,22 @@ public:
 	///
 	/// @return Vector of 2D points
 	///
-	std::vector<Point2D> getPointsFromFile() const override;
+	std::vector<Point2D> getFromFile() const;
 
 private:
 	std::filesystem::path m_file;
 };
 
-class Point3DReader : public IFileReader<Point3D>, public IArgumetParser<Point3D>
+class Point3DReader : public IFileReader<Point3DReader>, public IArgumetReader<Point3DReader>
 {
 public:
 	/// @brief Constructs object for reading 3D points
 	///
-	/// @param[in] fileName An Absolute file name where points is kept
+	/// @param[in] fileName An absolute file name where points is kept
 	///
-	/// @param[in] argument  Program argument for getting point
+	/// @note Can throw exception if file does not exist or third argument is empty
+	///
+	/// @param[in] argument  Passed point argument
 	///
 	Point3DReader(std::string_view fileName, std::string_view argument);
 
@@ -69,13 +75,13 @@ public:
 	///
 	/// @return Vector of 3D points
 	///
-	std::vector<Point3D> getPointsFromFile() const override;
+	std::vector<Point3D> getFromFile() const;
 
-	/// @brief Gets point from a 3th argument
+	/// @brief Gets 3D point from a 3th argument
 	///
 	/// @return 3D point
 	///
-	Point3D getPointFromArgument() const override;
+	Point3D getFromArgument() const;
 
 private:
 	std::filesystem::path m_file;

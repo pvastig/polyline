@@ -119,7 +119,7 @@ bool isAxis(Vector2D vector, const Point2D& point)
 	return 1. - dotValue <= epsilon;
 }
 
-vector2D_set calculateSymmetryAxes(const std::vector<Point2D>& points)
+Vector2DSet calculateSymmetryAxes(const std::vector<Point2D>& points)
 {
 	const Polyline2D polyline(points);
 	const auto centrePoint = findCenterOfPolyline(points);
@@ -143,13 +143,13 @@ vector2D_set calculateSymmetryAxes(const std::vector<Point2D>& points)
 		addProjectionsToArray(segment);
 	}
 
-	// It needs to find addition projection point in case not closed polyline 
+	// It needs to find addition projection point in case not closed polyline
 	if (!polyline.isClosed())
 	{
 		addProjectionsToArray(Vector2D(polyline.segments().front().first(), polyline.segments().back().last()));
 	}
 
-	vector2D_set axes;
+	Vector2DSet axes;
 	std::vector allPoints(points);
 
 	allPoints.reserve(points.size() + projections.size());

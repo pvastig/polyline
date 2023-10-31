@@ -27,7 +27,7 @@ void print(const std::vector<PolylineInfo>& infos);
 
 /// @brief Solves first task
 ///
-///@note Exception can be thrown if file does not exist or 3th argument is empty
+/// @note Exception can be thrown if file does not exist or 3th argument is empty
 ///
 /// @param[in] fileName A file containing polyline points
 ///
@@ -36,6 +36,8 @@ void print(const std::vector<PolylineInfo>& infos);
 void solveFirstTask(std::string_view fileName, std::string_view argument);
 
 /// @brief Solves second task
+///
+/// @note Exception can be thrown if a file does not exist
 ///
 /// @param[in] fileName A file containing polyline points
 ///

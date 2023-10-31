@@ -19,7 +19,7 @@ Point2DReader::Point2DReader(std::string_view fileName)
 	}
 }
 
-std::vector<Point2D> Point2DReader::getPointsFromFile() const
+std::vector<Point2D> Point2DReader::getFromFile() const
 {
 	std::vector<Point2D> points;
 	if (std::ifstream ifs(m_file, std::ifstream::in); ifs)
@@ -27,7 +27,7 @@ std::vector<Point2D> Point2DReader::getPointsFromFile() const
 		double x{}, y{};
 		while (ifs >> x >> y)
 		{
-			points.emplace_back( x, y);
+			points.emplace_back(Point2D(x, y));
 		}
 	}
 
@@ -49,12 +49,12 @@ Point3DReader::Point3DReader(std::string_view fileName, std::string_view program
 	}
 }
 
-std::vector<Point3D> Point3DReader::getPointsFromFile()const
+std::vector<Point3D> Point3DReader::getFromFile()const
 {
 	std::vector<Point3D> points;
 	if (std::ifstream ifs(m_file, std::ifstream::in); ifs)
 	{
-		double x, y, z;
+		double x{}, y{}, z{};
 		while (ifs >> x >> y >> z)
 		{
 			points.emplace_back(Point3D{ x, y, z });
@@ -64,7 +64,7 @@ std::vector<Point3D> Point3DReader::getPointsFromFile()const
 	return points;
 }
 
-Point3D Point3DReader::getPointFromArgument() const
+Point3D Point3DReader::getFromArgument() const
 {
 	std::stringstream is(m_argument.data());
 	if (double x, y, z;

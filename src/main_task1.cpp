@@ -17,11 +17,11 @@ int main(const int argc, char** argv)
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << e.what();
+		std::cerr << e.what() << std::endl;
 	}
 	catch (...)
 	{
-		std::cerr << "Unknown error";
+		std::cerr << "Unknown error" << std::endl;
 	}
 
 	return 1;

@@ -2,7 +2,7 @@
  \file
  \authors Astigeevich Pavel
  \warning Uses only for studying
- \brief The file contains different mathematical functions
+ \brief The file contains different mathematical functions for mathimatical operations with math vectors
 */
 
 #pragma once
@@ -89,17 +89,17 @@ struct PolylineInfo
 ///
 /// @param[in] info2 A second polyline information
 ///
-/// @return true if it is equal, otherwise false
+/// @return true if they are equal, otherwise false
 ///
 bool operator==(const PolylineInfo& info1, const PolylineInfo& info2);
 
 /// @brief Finds closest distance between point and segment of polyline
 ///
-/// @param[in] points An array of polyline
+/// @param[in] points An array of polyline points
 ///
 /// @param[in] point A point
 ///
-/// @return Array of closest distances
+/// @return Array of polyline information
 ///
 std::vector<PolylineInfo> findClosestDistances(const std::vector<Point3D>& points, const Point3D& point);
 
@@ -107,7 +107,7 @@ std::vector<PolylineInfo> findClosestDistances(const std::vector<Point3D>& point
 ///
 /// @param[in] points An array of 2D points
 ///
-/// @return 2D centre point
+/// @return Optional 2D centre point
 ///
 std::optional<Point2D> findCenterOfPolyline(const std::vector<Point2D>& points);
 
@@ -125,7 +125,7 @@ struct CustomCompareSet
 	bool operator()(const Vector2D& vector1, const Vector2D& vector2) const;
 };
 
-using vector2D_set = std::unordered_set<Vector2D, HashValSet, CustomCompareSet>;
+using Vector2DSet = std::unordered_set<Vector2D, HashValSet, CustomCompareSet>;
 
 /// @brief Calculates symmetry axes using points array
 ///
@@ -133,6 +133,6 @@ using vector2D_set = std::unordered_set<Vector2D, HashValSet, CustomCompareSet>;
 ///
 /// @return Unordered set of axes
 ///
-vector2D_set calculateSymmetryAxes(const std::vector<Point2D>& points);
+Vector2DSet calculateSymmetryAxes(const std::vector<Point2D>& points);
 
 }  // namespace pa

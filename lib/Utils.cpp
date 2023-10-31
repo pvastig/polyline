@@ -13,7 +13,7 @@
 namespace pa
 {
 
-void print(const vector2D_set& vectors)
+void print(const Vector2DSet& vectors)
 {
 	if (vectors.empty())
 	{
@@ -64,8 +64,8 @@ void print(const std::vector<PolylineInfo>& infos)
 void solveFirstTask(std::string_view fileName, std::string_view argument)
 {
 	const Point3DReader reader(fileName, argument);
-	const auto polylinePoints = reader.getPointsFromFile();
-	const auto point = reader.getPointFromArgument();
+	const auto polylinePoints = reader.getFromFile();
+	const auto point = reader.getFromArgument();
 	const auto result = findClosestDistances(polylinePoints, point);
 	print(result);
 }
@@ -73,7 +73,7 @@ void solveFirstTask(std::string_view fileName, std::string_view argument)
 void  solveSecondTask(std::string_view fileName)
 {
 	const Point2DReader reader(fileName);
-	const auto polylinePoints = reader.getPointsFromFile();
+	const auto polylinePoints = reader.getFromFile();
 	const auto result = calculateSymmetryAxes(polylinePoints);
 	print(result);
 }

@@ -67,15 +67,15 @@ public:
 	///
 	double getLength() const;
 
-	/// @brief Calculates getLength of vector without taking square root
+	/// @brief Calculates length of vector without taking square root
 	///
-	/// @return Square getLength of vector
+	/// @return Square length of vector
 	///
 	double getLengthWithoutSqrt() const;
 
 	/// @brief Calculates dot product of vectors
 	///
-	/// @param vector A vector
+	/// @param vector A 2D vector
 	///
 	/// @return Calculated value
 	///
