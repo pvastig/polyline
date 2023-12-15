@@ -21,3 +21,4 @@ set_target_properties(${BINARY} PROPERTIES UNITY_BUILD ON)
 target_link_libraries(${BINARY} PRIVATE GTest::GTest PUBLIC ${CMAKE_PROJECT_NAME}_lib)
 
 add_test(NAME ${BINARY} COMMAND ${BINARY})
+

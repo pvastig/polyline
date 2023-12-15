@@ -19,6 +19,8 @@ namespace pa
 struct Point3D;
 struct PolylineInfo;
 
+std::vector<Vector2D> sortResults(const Vector2DSet& vectors);
+
 /// @brief Prints to standard output information like "segment 2 point 2.25 1 0.25"
 ///
 /// @param[in] infos Array of polyline information

@@ -4,6 +4,7 @@
 #include "Point2D.h"
 #include "Polyline2D.h"
 #include "Vector2D.h"
+#include "Utils.h"
 
 #include <gtest/gtest.h>
 
@@ -102,7 +103,7 @@ TEST(polyline2D, findCenterOfPolyline)
 	ASSERT_EQ(point, refPoint);
 }
 
-TEST(polyline2D, DISABLED_buildAllPaths)
+TEST(polyline2D, buildAllPaths)
 {
 	auto compareVectors = [](auto&& refPointVectors, auto&& vectors, auto&& line)
 	{
@@ -125,21 +126,22 @@ TEST(polyline2D, DISABLED_buildAllPaths)
 
 	{
 		const auto axes = calculateSymmetryAxes({ { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } });
-		const std::vector refVectors{ Vector2D({ -1, 1 }), Vector2D({ 1, 1 }), Vector2D({ -1, 0 }), Vector2D({ 0, 1 }) };
+		const std::vector refVectors{ Vector2D({ 0, 1 }), Vector2D({ -1, 0 }), Vector2D({ 1, 1 }), Vector2D({ -1, 1 }) };
 		const std::vector refPointVectors{
-			Vector2D({ 1, 0 }, { 0, 1 }),
-			Vector2D({ 0, 0 }, { 1, 1 }),
+			Vector2D({ 0.5, 0 }, { 0.5, 1 }),
 			Vector2D({ 1, 0.5 }, { 0, 0.5 }),
-			Vector2D({ 0.5, 0 }, { 0.5, 1 }) };
-		const std::vector<Vector2D> vectors{ axes.cbegin(), axes.cend() };
+			Vector2D({ 0, 0 }, { 1, 1 }),
+			Vector2D({ 1, 0 }, { 0, 1 })
+		};
+		const std::vector vectors = sortResults(axes);
 
 		compareVectors(refPointVectors, vectors, __LINE__);
-		ASSERT_EQ(vectors, refVectors);
+		ASSERT_EQ(refVectors, vectors);
 	}
 	{
 		const auto axes = calculateSymmetryAxes({ { 0, 0 }, { 2, 1 }, { 0, 3 }, { -2, 1 } });
 		const std::vector refVectors{ Vector2D({ 0, 3 }) };
-		const std::vector<Vector2D> vectors{ axes.cbegin(), axes.cend() };
+		const std::vector vectors = sortResults(axes);
 		const std::vector refPointVectors{ Vector2D({ 0, 0 }, { 0, 3 }) };
 
 		compareVectors(refPointVectors, vectors, __LINE__);
@@ -148,12 +150,12 @@ TEST(polyline2D, DISABLED_buildAllPaths)
 	{
 		// equilateral triangle
 		const auto axes = calculateSymmetryAxes({ { 0, 0 }, { 5, 5*sqrt(3) }, { 10, 0 } });
-		const std::vector refVectors{ Vector2D({ -7.5, 4.33013 }), Vector2D({ 7.5, 4.33013 }), Vector2D({ 0, -8.66025 }) };
-		const std::vector<Vector2D> vectors{ axes.cbegin(), axes.cend() };
+		const std::vector refVectors{ Vector2D({ 7.5, 4.33013 }), Vector2D({ 0, -8.66025 }), Vector2D({ -7.5, 4.33013 }) };
+		const std::vector vectors = sortResults(axes);
 		const std::vector refPointVectors{
-			Vector2D({ 10, 0 }, { 2.5, 4.33013 }),
 			Vector2D({ 0, 0 }, { 7.5, 4.33013 }),
-			Vector2D({ 5, 8.66025 }, { 5, 0 })
+			Vector2D({ 5, 8.66025 }, { 5, 0 }),
+			Vector2D({ 10, 0 }, { 2.5, 4.33013 })
 		};
 
 		compareVectors(refPointVectors, vectors, __LINE__);
@@ -163,7 +165,7 @@ TEST(polyline2D, DISABLED_buildAllPaths)
 		// isosceles triangle
 		const auto axes = calculateSymmetryAxes({ { -2, 0 }, { 0, 6 }, { 2, 0 } });
 		const std::vector<Vector2D> refVectors{ Point2D{ 0, -6 } };
-		const std::vector<Vector2D> vectors{ axes.cbegin(), axes.cend() };
+		const std::vector vectors = sortResults(axes);
 		const std::vector refPointVectors{ Vector2D({ 0, 6 }, { 0, 0 }) };
 
 		compareVectors(refPointVectors, vectors, __LINE__);

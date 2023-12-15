@@ -13,15 +13,8 @@
 namespace pa
 {
 
-void print(const Vector2DSet& vectors)
+std::vector<Vector2D> sortResults(const Vector2DSet& vectors)
 {
-	if (vectors.empty())
-	{
-		std::cout << "non - symmetric" << std::endl;
-		return;
-	}
-
-	// TODO It needs to think how to get corrected values direct in code rather then to get here
 	std::vector sortedVectors2D(vectors.cbegin(), vectors.cend());
 	std::ranges::sort(sortedVectors2D, [](auto&& v1, auto&& v2)
 					  {
@@ -32,6 +25,19 @@ void print(const Vector2DSet& vectors)
 						  return  false;
 					  });
 
+	return sortedVectors2D;
+}
+
+void print(const Vector2DSet& vectors)
+{
+	if (vectors.empty())
+	{
+		std::cout << "non - symmetric" << std::endl;
+		return;
+	}
+
+	// TODO It needs to think how to get corrected values direct in code rather then to get here
+	const auto sortedVectors2D = sortResults(vectors);
 	for (const auto& vector : sortedVectors2D)
 	{
 		const auto& point1 = vector.first();
